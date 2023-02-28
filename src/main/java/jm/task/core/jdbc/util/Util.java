@@ -17,6 +17,9 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
+   private Util() {
+    }
+
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root";
     private static final String CONNECTURL = "jdbc:mysql://localhost:3306/mydbtest";
@@ -24,14 +27,16 @@ public class Util {
     public static Connection getConnection() {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(CONNECTURL,USERNAME,PASSWORD);
+            connection = DriverManager.getConnection(CONNECTURL, USERNAME, PASSWORD);
             System.out.println("Connected");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return connection;
     }
+
     private static SessionFactory sessionFactory;
+
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
@@ -63,22 +68,4 @@ public class Util {
         }
         return sessionFactory;
     }
-
-    private Session session;
-    private Transaction transaction;
-
-    public Session openTransactionSession() {
-        session = getSessionFactory().openSession();
-        transaction = session.beginTransaction();
-        return session;
-    }
-
-    public void closeSession() {
-        session.close();
-    }
-    public void closeTransactionSession() {
-        transaction.commit();
-        closeSession();
-    }
-
 }
